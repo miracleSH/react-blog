@@ -27,8 +27,14 @@ const userSchema = mongoose.Schema({
     },
     tokenExp : {
         type : Number
+    },
+    image : {
+        type : String
     }
     
 })
 
 const User = mongoose.model('User', userSchema);
+
+module.exports = {User}
+
