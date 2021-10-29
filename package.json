@@ -1,0 +1,23 @@
+{
+  "name": "react-blog",
+  "version": "1.0.0",
+  "description": "2021-10-29 /\r DB : mongoDB /\r front : React /\r back : node /",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miracleSH/react-blog.git"
+  },
+  "author": "seungheon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miracleSH/react-blog/issues"
+  },
+  "homepage": "https://github.com/miracleSH/react-blog#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.4.20"
+  }
+}
