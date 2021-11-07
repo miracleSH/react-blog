@@ -5,7 +5,7 @@ const config = require("./config/key");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { User } = require("./model/user");
-const { auth } = require("./middleware/auth");
+const { auth } = require("./model/middleware/auth");
 const port = 5000;
 
 mongoose
