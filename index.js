@@ -5,6 +5,7 @@ const config = require("./config/key");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { User } = require("./model/user");
+const { auth } = require("./middleware/auth");
 const port = 5000;
 
 mongoose
@@ -29,21 +30,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-app.post("/register", (req, res) => {
+//회원가입
+app.post("/users/register", (req, res) => {
   //회원가입에 필요한 정보들을 client에서 가져오면
   //데이터베이스에 전송
   const user = new User(req.body);
   user.save((err, userData) => {
+    console.log(err);
     if (err) return res.json({ success: false, err });
     return res.status(200).json({
       success: true,
     });
   });
 });
-
-app.post("/login", (req, res) => {
+//로그인 기능
+app.post("/users/login", (req, res) => {
   //요청된 이메일을 디비에 있는지 확인
+  console.log(req.body);
   User.findOne({ email: req.body.email }, (err, user) => {
+    console.log(err);
     if (!user) {
       return res.json({
         loginSucess: false,
@@ -67,5 +72,24 @@ app.post("/login", (req, res) => {
     });
   });
 });
-
+//auth
+app.get("/users/auth", auth, (req, res) => {
+  res.status(200).json({
+    _id: req.user._id,
+    isAdmin: req.user.role === 0 ? false : true,
+    isAutn: true,
+    email: req.user.email,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    role: req.user.role,
+    image: req.user.image,
+  });
+});
+//로그아웃(auth를 넣는 이유는 로그인된 상태에서 진행하는 것이기 떄문)
+app.get("/users/logout", auth, (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    if (err) res.json({ success: false, err });
+    return res.status(200).send({ success: true });
+  });
+});
 app.listen(port, () => console.log(`Example app listening on port ${port}`));
