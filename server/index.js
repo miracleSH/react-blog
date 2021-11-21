@@ -21,6 +21,9 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+app.get("/api/hello", (req, res) => {
+  res.send("hello~!");
+});
 
 app.get("/", (req, res) => {
   res.send("hello world!");
