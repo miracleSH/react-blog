@@ -21,9 +21,6 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
-app.get("/api/hello", (req, res) => {
-  res.send("hello~!");
-});
 
 app.get("/", (req, res) => {
   res.send("hello world!");
@@ -34,7 +31,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 //회원가입
-app.post("/users/register", (req, res) => {
+app.post("/api/users/register", (req, res) => {
   //회원가입에 필요한 정보들을 client에서 가져오면
   //데이터베이스에 전송
   const user = new User(req.body);
@@ -42,41 +39,38 @@ app.post("/users/register", (req, res) => {
     console.log(err);
     if (err) return res.json({ success: false, err });
     return res.status(200).json({
-      success: true,
+      registerSuccess: true,
     });
   });
 });
 //로그인 기능
-app.post("/users/login", (req, res) => {
+app.post("/api/users/login", (req, res) => {
   //요청된 이메일을 디비에 있는지 확인
   console.log(req.body);
   User.findOne({ email: req.body.email }, (err, user) => {
     console.log(err);
+    console.log(user);
     if (!user) {
       return res.json({
-        loginSucess: false,
+        loginSuccess: false,
         message: "제공된 이메일에 해당하는 유저가 없습니다.",
       });
     }
     //있다면 비밀번호 같은지 확인
     user.comparePassword(req.body.password, user.password, (err, isMatch) => {
-      if (!isMatch)
-        return res.json({ loginSucess: false, message: "비밀번호 오류" });
+      if (!isMatch) return res.json({ loginSucess: false, message: "비밀번호 오류" });
 
       //비밀번호가 맞다면 유저의 토큰을 생성
       user.generateToken(user, (err, user) => {
         if (err) return res.status(400).send(err);
         //토큰을 저장한다. 쿠키, 로컬스토리지, 세션 등등
-        res
-          .cookie("x_auth", user.token)
-          .status(200)
-          .json({ loginSucess: true, userId: user._id });
+        res.cookie("x_auth", user.token).status(200).json({ loginSuccess: true, userId: user._id });
       });
     });
   });
 });
 //auth
-app.get("/users/auth", auth, (req, res) => {
+app.get("/api/users/auth", auth, (req, res) => {
   res.status(200).json({
     _id: req.user._id,
     isAdmin: req.user.role === 0 ? false : true,
@@ -89,7 +83,7 @@ app.get("/users/auth", auth, (req, res) => {
   });
 });
 //로그아웃(auth를 넣는 이유는 로그인된 상태에서 진행하는 것이기 떄문)
-app.get("/users/logout", auth, (req, res) => {
+app.get("/api/users/logout", auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
     if (err) res.json({ success: false, err });
     return res.status(200).send({ success: true });

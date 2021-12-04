@@ -43,7 +43,6 @@ const userSchema = mongoose.Schema({
 userSchema.pre("save", function (next) {
   //비밀번호 암호화
   //비밀번호가 수정될 때만 암호화
-  console.log(this);
   if (this.isModified("password")) {
     bcrypt.genSalt(saltRounds, (err, salt) => {
       if (err) return next(err);
@@ -58,11 +57,7 @@ userSchema.pre("save", function (next) {
   }
 });
 //비밀번호 맞는지 비교
-userSchema.methods.comparePassword = function (
-  plainPassword,
-  encodedPassword,
-  callback
-) {
+userSchema.methods.comparePassword = function (plainPassword, encodedPassword, callback) {
   //plainPassword 와 암호화된 비밀번호랑 같은지 확인
   bcrypt.compare(plainPassword, encodedPassword, (err, isMatch) => {
     if (err) return callback(err);

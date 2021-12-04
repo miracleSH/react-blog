@@ -5,7 +5,17 @@ function LandingPage() {
     axios.get("/api/hello").then((res) => console.log(res));
   }, []);
 
-  return <div>LandingPage</div>;
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      시작페이지
+    </div>
+  );
 }
 
 export default LandingPage;
