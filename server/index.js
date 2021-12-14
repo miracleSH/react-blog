@@ -22,9 +22,6 @@ mongoose
     console.log(err);
   });
 
-app.get("/", (req, res) => {
-  res.send("hello world!");
-});
 //데이터 타입을 분석하는 역할
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -74,7 +71,7 @@ app.get("/api/users/auth", auth, (req, res) => {
   res.status(200).json({
     _id: req.user._id,
     isAdmin: req.user.role === 0 ? false : true,
-    isAutn: true,
+    isAuth: true,
     email: req.user.email,
     name: req.user.name,
     lastname: req.user.lastname,

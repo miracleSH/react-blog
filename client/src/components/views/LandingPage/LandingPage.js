@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import Auth from "../../../hoc/auth";
 function LandingPage() {
-  useEffect(() => {
-    axios.get("/api/hello").then((res) => console.log(res));
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div
@@ -18,4 +17,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default Auth(LandingPage, null);
